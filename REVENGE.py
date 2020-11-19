@@ -57,27 +57,76 @@ class SampleAgent(object):
         self.base_info = base_info
         # print(base_info)
         # print(diff_data)
-        
+        logging.debug('# UPDATE')
+
+        #On mémorise les gens mort en baissant leurs score de haine
+        if (request == 'DAILY_INITIALIZE'):
+            for i in range(self.player_total):
+                if (base_info['statusMap'][str(i+1)] == 'DEAD'):
+                    self.player_score[i] -= 10000
+
+        #On regarde dans diff_data pour les paroles / votes
+        #logging.debug(diff_data)
+
+        for row in diff_data.itertuples():
+            type = getattr(row,'type')
+            text = getattr(row,'text')
+            if (type == 'vote'):
+                voter = getattr(row,'idx')
+                target = getattr(row,'agent')
+                if target == self.myid:
+                    #On est la cible du vote
+                    logging.debug('Agent {} a voté pour moi !'.format(voter))
+                    self.player_score[voter-1] += 100
+            elif (type == 'talk' and '[{:02d}]'.format(self.myid) in text):
+                #Ils ont parlé de moi
+                source = getattr(row,'agent')
+                logging.debug('Il a parle de moi : {}'.format(text))
+                if 'WEREWOLF' in text or 'VOTE' in text:
+                    #On se fait accusé de loupgarou
+                    #On pense voter pour moi
+                    self.player_score[source-1] += 10
+
+                else:
+                    #On a arreté de parlé de moi 
+                    self.player_score[source-1] += 1
+        self.hate = self.player_score.index(max(self.player_score)) + 1
+        logging.debug('Hate Score: '+', '.join(str(x) for x in self.player_score))  
+
     def dayStart(self):
+        logging.debug('# DAYSTART')
         return None
     
     def talk(self):
-        return cb.over()
+        logging.debug('# TALK')
+
+        hatecycle =[
+            'REQUEST ANY (VOTE Agent[{:02d}])',
+            'ESTIMATE Agent[{:02d}] WEREWOLF',
+            'VOTE Agent [{:02d}]',
+        ]
+        logging.debug(hatecycle[randint(0,2)].format(self.hate))
+        return hatecycle[randint(0,2)].format(self.hate)
     
     def whisper(self):
-        return cb.over()
+        logging.debug('# WHISPER')
+        return 'ATTACK Agent[{:02d}]'.format(self.hate)
         
     def vote(self):
-        return self.base_info['agentIdx']
+        logging.debug('# VOTE: '+str(self.hate))
+        return self.hate
     
     def attack(self):
-        return self.base_info['agentIdx']
+        logging.debug('# ATTACK: '+str(self.hate))
+        return self.hate
     
     def divine(self):
-        return self.base_info['agentIdx']
+        logging.debug('# DIVINE: '+str(self.hate))
+        return self.hate
     
     def guard(self):
-        return self.base_info['agentIdx']
+        logging.debug('# GUARD: '+str(self.hate))
+        return self.hate
     
     def finish(self):
         return None
