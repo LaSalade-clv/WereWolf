@@ -58,6 +58,8 @@ class SampleAgent(object):
         # print(base_info)
         # print(diff_data)
         logging.debug('# UPDATE')
+        logging.debug(base_info)
+        logging.debug(diff_data)
 
         #On mémorise les gens mort en baissant leurs score de haine
         if (request == 'DAILY_INITIALIZE'):

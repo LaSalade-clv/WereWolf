@@ -1,0 +1,2 @@
+Ranquinier = OK
+Suiveur = KO
