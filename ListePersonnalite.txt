@@ -1,5 +1,5 @@
 Ranquinier = OK
 Suiveur = KO
-Random = KO
+Random = OK
 Contraire = KO
 Q-Learning = KO
