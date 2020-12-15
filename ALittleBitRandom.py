@@ -84,7 +84,7 @@ class SampleAgent(object):
                         if (ligne[1] == 'divine'):
                             if ('WEREWOLF' in ligne[5]):
                                 self.werewolfFound(ligne[4])
-                            else:
+                            elif (ligne[4] in self.player_list):
                                 self.player_list.remove(ligne[4])
 
 
