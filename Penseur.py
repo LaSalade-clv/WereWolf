@@ -87,13 +87,17 @@ class SampleAgent(object):
             if (type == 'vote'):
                 voter = getattr(row,'idx')
                 target = getattr(row,'agent')
-                self.historique_vote[voter-1] = target
-
-
-#Fonctionne pas
                 if getattr(row,'day') >= 2:
+                    x=0
+                    logging.debug('voter/target{}:'.format(x))
+                    x+=1
+                    logging.debug(voter)
+                    logging.debug(target)
                     if self.historique_vote[voter-1] == target:
-                        self.player_suspect[target-1] += 10000
+                        self.player_suspect[target-1] += 1000
+               
+
+                self.historique_vote[voter-1] = target
 
         logging.debug('suspect:')
         logging.debug(self.historique_vote)
