@@ -1,5 +1,8 @@
 Ranquinier = OK
 Suiveur = OK
+Saumon = OK
 Random = OK
-Contraire = KO
-LePenseur = KO
+Le Novice = OK
+LePenseur = OK
+Le Menteur = KO
+
