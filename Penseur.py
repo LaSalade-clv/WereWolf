@@ -48,8 +48,6 @@ class SampleAgent(object):
         self.player_suspect = [0]*self.player_total
         self.player_suspect[self.myid-1] = -10000
 
-        self.player_suivi = [0]*self.player_total
-        self.player_suivi[self.myid-1] = -10000
 
         self.historique_vote = [0]*self.player_total
 
@@ -68,7 +66,6 @@ class SampleAgent(object):
             for i in range(self.player_total):
                 if (base_info['statusMap'][str(i+1)] == 'DEAD'):
                     self.player_suspect[i] -= 10000
-                    self.player_suivi[i] -= 10000
 
         if (base_info['myRole'] == 'SEER'):
             for ligne in diff_data.values:
