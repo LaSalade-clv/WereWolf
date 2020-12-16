@@ -79,8 +79,6 @@ class SampleAgent(object):
 
             #Lorsqu'ils parlent
             elif (type == 'talk' and 'Agent' in text): 
-                #Ils ont parlé de moi
-                #cible = getattr(row,'agent')
 
                 for x,n in enumerate(text):
                     if n.isdigit():
@@ -90,12 +88,9 @@ class SampleAgent(object):
                         continue
 
                 if 'WEREWOLF' in text or 'VOTE' in text:
-                    #On se fait accusé de loupgarou
-                    #On pense voter pour moi
                     self.player_score[cible-1] -= 2
 
                 else:
-                    #On a arreté de parlé de moi 
                     self.player_score[cible-1] -= 1
 
         self.hate = self.player_score.index(max(self.player_score)) + 1
