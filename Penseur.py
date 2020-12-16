@@ -9,24 +9,19 @@ import logging, json
 import aiwolfpy
 import aiwolfpy.contentbuilder as cb
 
-
 '''
 Alexis 
 '''
-
-
 myname = 'Penseur{:02d}'.format(randint(0,99))
 
 class SampleAgent(object):
-    
     def __init__(self, agent_name):
         # myname
         self.myname = agent_name
         logging.basicConfig(filename=self.myname+'.log',
                             level=logging.DEBUG,
                             format='')
-        
-        
+         
     def getName(self):
         return self.myname
     
@@ -35,10 +30,6 @@ class SampleAgent(object):
         # game_setting
         self.game_setting = game_setting
         
-        print(base_info)
-        #print(diff_data)
-        print('\n',game_setting)
-
         #mémorise l'id de l'agent
         self.myid = base_info['agentIdx']
         logging.debug('# INIT : I\'am agent {}'.format(self.myid))
@@ -51,16 +42,12 @@ class SampleAgent(object):
 
         self.historique_vote = [0]*self.player_total
 
-        #On selectionne le joueur avec le plus de haine 
         self.suspect = self.player_suspect.index(max(self.player_suspect)) + 1
 
     def update(self, base_info, diff_data, request):
         self.base_info = base_info
-        # print(base_info)
-        # print(diff_data)
-        logging.debug('# UPDATE jour : {}'.format('x'))
-        #logging.debug(base_info)
-
+        logging.debug('# UPDATE')
+        logging.debug(diff_data)
         #On mémorise les gens mort en baissant leurs score de haine
         if (request == 'DAILY_INITIALIZE'):
             for i in range(self.player_total):
@@ -78,35 +65,16 @@ class SampleAgent(object):
 
 
         #On regarde dans diff_data pour les paroles / votes
-        logging.debug(diff_data)
-
         for row in diff_data.itertuples():
             type = getattr(row,'type')
-
             #Lors du vote
             if (type == 'vote'):
                 voter = getattr(row,'idx')
                 target = getattr(row,'agent')
                 if getattr(row,'day') >= 2:
-                    x=0
-                    logging.debug('voter/target{}:'.format(x))
-                    x+=1
-                    logging.debug(voter)
-                    logging.debug(target)
                     if self.historique_vote[voter-1] == target:
                         self.player_suspect[target-1] += 1000
-               
-
                 self.historique_vote[voter-1] = target
-
-        logging.debug('suspect:')
-        logging.debug(self.historique_vote)
-
-        logging.debug(self.player_suspect)
-
-
-
-         
 
     def dayStart(self):
         logging.debug('# DAYSTART')
